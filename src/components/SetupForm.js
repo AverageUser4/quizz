@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import Loading from './Loading';
 
-const SetupForm = ({ queryData, setQueryData, setIsPlaying }) => {
+const MIN_QUESTIONS = 5;
+const MAX_QUESTIONS = 50;
+
+const SetupForm = ({ queryData, setQueryData, setIsPlaying, error }) => {
   const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState([]);
 
@@ -18,7 +21,7 @@ const SetupForm = ({ queryData, setQueryData, setIsPlaying }) => {
         if(ignore)
           return;
 
-        setCategories(json.trivia_categories);
+        setCategories(json.trivia_categories || []);
         setLoading(false);
 
       } catch(e) {
@@ -46,7 +49,7 @@ const SetupForm = ({ queryData, setQueryData, setIsPlaying }) => {
   function ensureAmountIsValid(event) {
     const value = parseInt(event.target.value);
 
-    const newValue = Math.max(Math.min(value, 50), 10) || 10;
+    const newValue = Math.max(Math.min(value, MAX_QUESTIONS), MIN_QUESTIONS) || MIN_QUESTIONS;
     
     if(newValue !== value)
       setQueryData(prev => ({ ...prev, amount: newValue }));
@@ -74,8 +77,8 @@ const SetupForm = ({ queryData, setQueryData, setIsPlaying }) => {
             name="amount"
             id="amount"
             className="form-input"
-            min={1}
-            max={50}
+            min={MIN_QUESTIONS}
+            max={MAX_QUESTIONS}
             value={queryData.amount}
             onChange={handleChange}
             onBlur={ensureAmountIsValid}
@@ -120,6 +123,7 @@ const SetupForm = ({ queryData, setQueryData, setIsPlaying }) => {
             value={queryData.difficulty}
             onChange={handleChange}
           >
+            <option value="">any</option>
             <option value="easy">easy</option>
             <option value="medium">medium</option>
             <option value="hard">hard</option>
@@ -127,6 +131,8 @@ const SetupForm = ({ queryData, setQueryData, setIsPlaying }) => {
           
         </div>
         
+        {error && <p className="error">{error}</p>}
+
         <button type="submit" className="submit-btn">start</button>
 
       </form>

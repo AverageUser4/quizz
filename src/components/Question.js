@@ -2,9 +2,9 @@ import React from 'react'
 
 const Question = ({ question, answers, answerQuestion }) => {
   return (
-    <article className="container">
+    <article>
 
-      <h2>{question}</h2>
+      <h2 className="question">{question}</h2>
 
       <div className="btn-container">
         

@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Modal = ({ show, setIsPlaying, correctAnswers, allAnswers }) => {
+const Modal = ({ show, endQuizz, correctAnswers, allAnswers }) => {
   const correctPercent = (correctAnswers / allAnswers * 100).toFixed(2);
 
   return (
@@ -14,7 +14,7 @@ const Modal = ({ show, setIsPlaying, correctAnswers, allAnswers }) => {
 
         <button 
           className="close-btn"
-          onClick={() => setIsPlaying(false)}
+          onClick={endQuizz}
         >
           play again
         </button>

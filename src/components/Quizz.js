@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import Modal from './Modal';
 import Question from './Question';
 
-export default function Quizz({ questions, setIsPlaying }) {
+export default function Quizz({ questions, endQuizz }) {
   const [gameData, setGameData] = useState({
     currentQuestion: 0,
     maxQuestion: questions.length - 1,
@@ -27,7 +27,7 @@ export default function Quizz({ questions, setIsPlaying }) {
     
       <Modal
         show={gameData.isOver}
-        setIsPlaying={setIsPlaying}
+        endQuizz={endQuizz}
         correctAnswers={gameData.correctAnswers}
         allAnswers={gameData.allAnswers}
       />

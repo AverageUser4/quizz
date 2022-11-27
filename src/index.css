@@ -140,7 +140,7 @@ Quiz
 ===============
 */
 
-main {
+.setup-container {
   min-height: 100vh;
   display: flex;
   justify-content: center;
@@ -157,11 +157,18 @@ main {
 .quiz-small {
   max-width: 500px;
 }
-.container h2 {
+.question {
+  font-size: clamp(16px, 3vw, 24px);
+  min-height: 180px;
   margin-bottom: 2rem;
   text-align: center;
   line-height: 1.5;
   text-transform: none;
+}
+@media(min-width: 500px) {
+  .question {
+    min-height: 140px;
+  }
 }
 .answer-btn {
   display: block;
@@ -246,7 +253,6 @@ Form
 }
 .error {
   color: var(--clr-red-dark);
-  text-transform: capitalize;
 }
 .submit-btn {
   width: 100%;
