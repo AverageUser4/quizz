@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
+import PropTypes from 'prop-types';
+
 import Loading from './Loading';
 
 const MIN_QUESTIONS = 5;
 const MAX_QUESTIONS = 50;
 
 const SetupForm = ({ queryData, setQueryData, startQuizz, error }) => {
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
@@ -13,7 +15,7 @@ const SetupForm = ({ queryData, setQueryData, startQuizz, error }) => {
 
     async function fetchCategories() {
       try {
-        setLoading(true);
+        setIsLoading(true);
 
         const data = await fetch('https://opentdb.com/api_category.php');
         const json = await data.json();
@@ -22,11 +24,11 @@ const SetupForm = ({ queryData, setQueryData, startQuizz, error }) => {
           return;
 
         setCategories(json.trivia_categories || []);
-        setLoading(false);
+        setIsLoading(false);
 
       } catch(e) {
         console.error(e);
-        setLoading(false);
+        setIsLoading(false);
       }
     }
     
@@ -55,7 +57,7 @@ const SetupForm = ({ queryData, setQueryData, startQuizz, error }) => {
       setQueryData(prev => ({ ...prev, amount: newValue }));
   }
 
-  if(loading)
+  if(isLoading)
     return <Loading/>
 
   return (
@@ -140,5 +142,12 @@ const SetupForm = ({ queryData, setQueryData, startQuizz, error }) => {
     </section>
   );
 }
+
+SetupForm.propTypes = {
+  queryData: PropTypes.object,
+  setQueryData: PropTypes.func,
+  startQuizz: PropTypes.func,
+  error: PropTypes.string
+};
 
 export default SetupForm

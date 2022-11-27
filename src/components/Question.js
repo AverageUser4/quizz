@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 
 const Question = ({ question, answers, answerQuestion, answeredIndex }) => {
   return (
@@ -36,5 +37,12 @@ const Question = ({ question, answers, answerQuestion, answeredIndex }) => {
     </article>
   );
 }
+
+Question.propTypes = {
+  question: PropTypes.string,
+  answers: PropTypes.array,
+  answerQuestion: PropTypes.func,
+  answeredIndex: PropTypes.number
+};
 
 export default Question

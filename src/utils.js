@@ -13,3 +13,7 @@ export function shuffleArray(array) {
 
   return result;
 }
+
+export function getPercent(a, b) {
+  return (a / b * 100).toFixed(2);
+}

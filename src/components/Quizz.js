@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 
 import Modal from './Modal';
 import Question from './Question';
 
-export default function Quizz({ questions, endQuizz }) {
+function Quizz({ questions, endQuizz }) {
   const [gameData, setGameData] = useState({
     currentQuestion: 0,
     answeredIndex: -1,
@@ -31,7 +32,7 @@ export default function Quizz({ questions, endQuizz }) {
 
     setGameData(prev => ({
       ...prev,
-      answeredIndex: -1,
+      answeredIndex: prev.currentQuestion === prev.maxQuestion ? prev.answeredIndex : -1,
       currentQuestion: Math.min(prev.maxQuestion, prev.currentQuestion + 1),
       isOver: prev.currentQuestion + 1 > prev.maxQuestion
     }));
@@ -80,3 +81,10 @@ export default function Quizz({ questions, endQuizz }) {
     </>
   );
 }
+
+Quizz.propTypes = {
+  questions: PropTypes.array,
+  endQuizz: PropTypes.func
+};
+
+export default Quizz;
