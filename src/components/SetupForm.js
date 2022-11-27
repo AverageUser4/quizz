@@ -4,7 +4,7 @@ import Loading from './Loading';
 const MIN_QUESTIONS = 5;
 const MAX_QUESTIONS = 50;
 
-const SetupForm = ({ queryData, setQueryData, setIsPlaying, error }) => {
+const SetupForm = ({ queryData, setQueryData, startQuizz, error }) => {
   const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState([]);
 
@@ -37,7 +37,7 @@ const SetupForm = ({ queryData, setQueryData, setIsPlaying, error }) => {
 
   function handleSubmit(event) {
     event.preventDefault();
-    setIsPlaying(true);
+    startQuizz();
   }
 
   function handleChange(event) {

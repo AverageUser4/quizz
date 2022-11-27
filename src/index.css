@@ -184,23 +184,53 @@ Quiz
   padding: 0.5rem 0;
   transition: var(--transition);
 }
+.answer-btn:hover {
+  background: var(--clr-primary-5);
+  color: var(--clr-white);
+}
+.answer-btn.answer-btn--disabled {
+  color: var(--clr-black);
+  background: var(--clr-primary-7);
+  cursor: default;
+}
+.answer-btn.answer-btn--correct {
+  background-color: var(--clr-green-dark);
+}
+.answer-btn.answer-btn--incorrect {
+  background-color: var(--clr-red-dark);
+}
 @media screen and (min-width: 576px) {
   .answer-btn {
     max-width: 60%;
   }
 }
-.answer-btn:hover {
-  background: var(--clr-primary-5);
-  color: var(--clr-white);
-}
-.correct-answers {
+.quizz-data {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
   font-size: 1rem;
   margin-bottom: 2rem;
-  text-align: right;
   text-transform: capitalize;
   letter-spacing: var(--spacing);
   color: var(--clr-green-dark);
 }
+.quizz-data__category {
+  color: var(--clr-black);
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+.quizz-data__easy {
+  color: var(--clr-green-dark);
+}
+.quizz-data__medium {
+  color: goldenrod;
+}
+.quizz-data__hard {
+  color: var(--clr-red-dark);
+}
+
+
 .next-question,
 .close-btn,
 .submit-btn {

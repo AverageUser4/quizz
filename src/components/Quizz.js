@@ -6,21 +6,38 @@ import Question from './Question';
 export default function Quizz({ questions, endQuizz }) {
   const [gameData, setGameData] = useState({
     currentQuestion: 0,
+    answeredIndex: -1,
     maxQuestion: questions.length - 1,
     isOver: false,
     correctAnswers: 0,
     allAnswers: 0
   });
 
-  function answerQuestion(isCorrect) {
+  function answerQuestion(isCorrect, index) {
+    if(gameData.answeredIndex >= 0)
+      return;
+
     setGameData(prev => ({
       ...prev,
-      currentQuestion: Math.min(prev.maxQuestion, prev.currentQuestion + 1),
+      answeredIndex: index,
       correctAnswers: isCorrect ? prev.correctAnswers + 1 : prev.correctAnswers,
       allAnswers: prev.allAnswers + 1,
+    }));
+  }
+
+  function nextQuestion() {
+    if(gameData.answeredIndex < 0)
+      return;
+
+    setGameData(prev => ({
+      ...prev,
+      answeredIndex: -1,
+      currentQuestion: Math.min(prev.maxQuestion, prev.currentQuestion + 1),
       isOver: prev.currentQuestion + 1 > prev.maxQuestion
     }));
   }
+
+  const { question, answers, category, difficulty } = questions[gameData.currentQuestion];
 
   return (  
     <>
@@ -34,17 +51,26 @@ export default function Quizz({ questions, endQuizz }) {
 
       <section className="quiz">
 
-        <p className="correct-answers">correct answers : {gameData.correctAnswers}/{gameData.allAnswers}</p>
+        <p className="quizz-data">
+          <span className="quizz-data__category">{category}</span>
+          <span className={`quizz-data__${difficulty}`}>{difficulty}</span>
+        </p>
+
+        <p className="quizz-data">
+          <span>question: {gameData.currentQuestion + 1}/{gameData.maxQuestion + 1}</span>
+          <span>correct answers: {gameData.correctAnswers}</span>
+        </p>
 
         <Question
-          question={questions[gameData.currentQuestion].question}
-          answers={questions[gameData.currentQuestion].answers}
+          question={question}
+          answers={answers}
           answerQuestion={answerQuestion}
+          answeredIndex={gameData.answeredIndex}
         />
 
         <button 
           className="next-question"
-          onClick={() => answerQuestion(false)}
+          onClick={() => nextQuestion(false)}
         >
           next question
         </button>

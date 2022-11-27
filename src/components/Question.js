@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Question = ({ question, answers, answerQuestion }) => {
+const Question = ({ question, answers, answerQuestion, answeredIndex }) => {
   return (
     <article>
 
@@ -9,15 +9,26 @@ const Question = ({ question, answers, answerQuestion }) => {
       <div className="btn-container">
         
         {
-          answers.map(answer => 
-            <button 
-              key={answer.answer}
-              className="answer-btn"
-              onClick={() => answerQuestion(answer.isCorrect)}
-            >
-              {answer.answer}
-            </button>
-          )
+          answers.map((answer, index) => {
+            let buttonClass = 'answer-btn';
+
+            if(answeredIndex >= 0) {
+              buttonClass += ' answer-btn--disabled';
+
+              if(index === answeredIndex || answer.isCorrect)
+                buttonClass += answer.isCorrect ? ' answer-btn--correct' : ' answer-btn--incorrect';
+            }
+            
+            return (
+              <button 
+                key={answer.answer}
+                className={buttonClass}
+                onClick={() => answerQuestion(answer.isCorrect, index)}
+              >
+                {answer.answer}
+              </button>
+            );
+          })
         }
           
       </div>

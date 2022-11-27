@@ -14,23 +14,26 @@ const initialQueryData = {
   difficulty: ''
 };
 
+const initialSetupData = {
+  isPlaying: false,
+  isLoading: false,
+  error: ''
+};
+
 function App() {
-  const [isPlaying, setIsPlaying] = useState(false);
   const [queryData, setQueryData] = useState(initialQueryData);
   const [questions, setQuestions] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [setupData, setSetupData] = useState(initialSetupData);
 
   useEffect(() => {
-    if(!isPlaying)
+    if(!setupData.isPlaying)
       return;
 
     let ignore = false;
     
     async function fetchQuestions() {
       try {
-        setLoading(true);
-        setError('');
+        setSetupData(prev => ({ ...prev, isLoading: true, error: '' }));
 
         let url = API_ENDPOINT;
         for(let key in queryData)
@@ -68,51 +71,54 @@ function App() {
         }
           
         const questions = results.map((q) => {
-          const { question, correct_answer, incorrect_answers } = q;
+          const { question, correct_answer, incorrect_answers, category, difficulty } = q;
           const correct = { answer: parseHTMLEntities(correct_answer), isCorrect: true };
           const incorrect = incorrect_answers.map(ans => ({ answer: parseHTMLEntities(ans), isCorrect: false }));
           const answers = shuffleArray([correct, ...incorrect]);
-          return { question: parseHTMLEntities(question), answers };
+          return { question: parseHTMLEntities(question), answers, category, difficulty };
         });
 
-        setLoading(false);
+        setSetupData(prev => ({ ...prev, isLoading: false }));
         setQuestions(questions);
 
       } catch(e) {
         if(e.textForDeveloper)
           console.error(e.textForDeveloper);
           
-        setError(e.textForUser);
-        setLoading(false);
-        setIsPlaying(false);
+        setSetupData(prev => ({ ...prev, isPlaying: false, isLoading: false, error: e.textForUser }));
       }
 
     }
     fetchQuestions();
 
     return () => ignore = true;
-  }, [isPlaying, queryData]);
+  }, [setupData.isPlaying, queryData]);
+
+
+  function startQuizz() {
+    setSetupData(prev => ({ ...prev, isPlaying: true }));
+  }
 
   function endQuizz() {
-    setIsPlaying(false);
+    setSetupData(prev => ({ ...prev, isPlaying: false }));
     setQuestions([]);
   }
 
-  if(!isPlaying)
+  if(!setupData.isPlaying)
     return (
       <main className="setup-container">
 
         <SetupForm
-          setIsPlaying={setIsPlaying}
+          startQuizz={startQuizz}
+          error={setupData.error}
           queryData={queryData}
           setQueryData={setQueryData}
-          error={error}
         />
 
       </main>
     );
 
-  if(loading || questions.length === 0)
+  if(setupData.isLoading || questions.length === 0)
       return <Loading/>
 
   return (
